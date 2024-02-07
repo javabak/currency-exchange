@@ -1,10 +1,11 @@
 package servlet.currency_servlets;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.java.Log;
 import model.Currency;
 import service.CurrencyService;
 import util.resp.ResponseHandler;
@@ -15,14 +16,18 @@ import java.util.List;
 import static util.mapper.ToStringMapper.mapToString;
 
 @WebServlet("/currencies")
+@Log
 public class CurrenciesServlet extends HttpServlet {
 
     private final CurrencyService currencyService = new CurrencyService();
-    private final ObjectMapper mapper = new ObjectMapper();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         List<Currency> currencies = currencyService.getAllCurrencies();
+        req.setAttribute("currencies", currencies);
+
+        log.info("get all currencies".concat(mapToString(currencies)));
+        req.getRequestDispatcher("currency.jsp").forward(req, resp);
         ResponseHandler.sendResponse(resp, HttpServletResponse.SC_OK, mapToString(currencies));
     }
 
@@ -40,6 +45,8 @@ public class CurrenciesServlet extends HttpServlet {
                 .build();
 
         Currency createdCurrency = currencyService.createCurrency(currency);
+
+        log.info("created currency".concat(mapToString(createdCurrency)));
         ResponseHandler.sendResponse(resp, HttpServletResponse.SC_OK, mapToString(createdCurrency));
     }
 }

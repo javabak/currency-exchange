@@ -1,9 +1,8 @@
 package service;
 
 import exceptions.request_exceptions.CurrencyNotCreateException;
-import exceptions.validate_exceptions.WrongParametersException;
-import lombok.extern.slf4j.Slf4j;
 import exceptions.request_exceptions.CurrencyNotFoundException;
+import exceptions.validate_exceptions.WrongParametersException;
 import model.Currency;
 import repository.CurrencyJdbcRepository;
 
@@ -12,7 +11,6 @@ import java.util.Optional;
 
 import static util.validate.CurrencyValidate.*;
 
-@Slf4j
 public class CurrencyService {
 
     private final CurrencyJdbcRepository currencyJdbcRepository = new CurrencyJdbcRepository();

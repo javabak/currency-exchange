@@ -6,12 +6,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.SneakyThrows;
+import lombok.extern.java.Log;
 import service.ExchangeRateService;
 import util.resp.ResponseHandler;
 
 import static util.mapper.ToStringMapper.mapToString;
 
 @WebServlet("/exchangeRate")
+@Log
 public class ExchangeRateServlet extends HttpServlet {
 
     private final ExchangeRateService exchangeRateService = new ExchangeRateService();
@@ -22,6 +24,7 @@ public class ExchangeRateServlet extends HttpServlet {
         String codes = req.getParameter("codes");
 
         ExchangeRateDto exchangeRateDto = exchangeRateService.getByCodes(codes);
+        log.info("get exchange rate by code".concat(mapToString(exchangeRateDto)));
         ResponseHandler.sendResponse(resp, HttpServletResponse.SC_OK, mapToString(exchangeRateDto));
     }
 
@@ -34,6 +37,7 @@ public class ExchangeRateServlet extends HttpServlet {
 
         ExchangeRateDto exchangeRateDto = exchangeRateService.updateExchangeRate(baseCode, targetCode, rate);
 
+        log.info("updated exchange rate".concat(mapToString(exchangeRateDto)));
         ResponseHandler.sendResponse(resp, HttpServletResponse.SC_OK, mapToString(exchangeRateDto));
     }
 
