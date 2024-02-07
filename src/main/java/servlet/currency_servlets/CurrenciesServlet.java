@@ -1,6 +1,5 @@
 package servlet.currency_servlets;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,12 +21,12 @@ public class CurrenciesServlet extends HttpServlet {
     private final CurrencyService currencyService = new CurrencyService();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         List<Currency> currencies = currencyService.getAllCurrencies();
         req.setAttribute("currencies", currencies);
 
+
         log.info("get all currencies".concat(mapToString(currencies)));
-        req.getRequestDispatcher("currency.jsp").forward(req, resp);
         ResponseHandler.sendResponse(resp, HttpServletResponse.SC_OK, mapToString(currencies));
     }
 
